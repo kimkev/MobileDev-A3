@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Canvas - Chess Board</title>
+<meta charset="utf-8">
+<script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
+</head>
+<style>
+    p {
+    position: absolute;
+    left: 200px;    
+    top: 45px;
+}
+</style>
+<body>
+<div style="padding:30px">
+    <h2>Chess Board</h2>
+    <p><input type="text" id="color"></p>
+    <canvas id="myCanvas" width="480" height="480" style="border:1px solid #c3c3c3;">
+    </canvas>
+</div>
+
+<script>
+$(document).ready(function() {
+    var gColor = "black";
+    var c = $("#myCanvas")[0];
+    var ctx = c.getContext("2d");
+
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "black";	//set the color, gradient, or pattern for stroke
+    
+    drawBoard();
+    $("#color").click(function () {
+        gColor = $("#color").val();
+        if (gColor > "")
+            drawBoard();
+    });
+    
+	function drawBoard() {
+		var x, y, step = 60, step2 = 120;
+		ctx.rect(0,0,480,480);
+		ctx.stroke();
+		ctx.save();
+
+		for (var k=0; k<2; k++)  {
+			step2 -= step;
+			ctx.translate(0, step*k);
+			console.log("translate:("+0+","+step*k+")");
+			for (var y=0; y<4; y++) {
+				for (var i=0; i<4; i++)  {
+					x = i * 2 * step + step2;
+					ctx.fillStyle = gColor;
+					ctx.fillRect(x,y*step*2,step,step);
+					console.log("fillRect: "+x+","+y*step*2+","+step+","+step+","+gColor);
+				}
+			}
+		}	
+		ctx.restore();
+	}
+  
+	function drawRed(x, y){
+		ctx.beginPath();
+		ctx.fillStyle = "red";
+		var rad = 180
+		ctx.arc(x, y, 25, 0, 2 * Math.PI);
+		ctx.fill();
+		ctx.stroke();
+	}
+	
+	function drawYellow(x, y){
+		ctx.beginPath();
+		ctx.fillStyle = "yellow";
+		var rad = 180
+		ctx.arc(x, y, 25, 0, 2 * Math.PI);
+		ctx.fill();
+		ctx.stroke();
+	}
+	
+	function drawCircle(){
+		var stepRedX = 30;
+		var stepRedY = 30;
+		var stepYellowX = 30;
+		var stepYellowY = 390;
+		for (var i = 0; i < 2; i++){
+			for (var j=0; j<8; j++){
+				drawRed(stepRedX, stepRedY);
+				drawYellow(stepYellowX, stepYellowY);
+				stepRedX += 60;
+				stepYellowX += 60; 
+			}
+			stepRedY += 60;
+			stepRedX = 30;
+			stepYellowY += 60;
+			stepYellowX = 30;
+		}
+	}
+	drawCircle();
+	
+	
+  
+});
+
+</script>
+</body>
+</html>
